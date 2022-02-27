@@ -12,14 +12,34 @@
     define(FILENAME, "fl1.txt");
     $firstName = "";
     $lastName = "";
+    $email = "";
+    $createDate = "";
+    $ip = "";
     $result = "";
+
+    // Чужая функция
+    function get_ip(){
+        $value = '';
+        if (!empty($_SERVER['HTTP_CLIENT_IP'])) {
+            $value = $_SERVER['HTTP_CLIENT_IP'];
+        } elseif (!empty($_SERVER['HTTP_X_FORWARDED_FOR'])) {
+            $value = $_SERVER['HTTP_X_FORWARDED_FOR'];
+        } elseif (!empty($_SERVER['REMOTE_ADDR'])) {
+            $value = $_SERVER['REMOTE_ADDR'];
+        }
+
+        return $value;
+    }
 
     // if($_SERVER["REQUEST_METHOD"] == "POST"){|
     if(isset($_POST["fname"]) && $_POST["lname"]) {
         $firstName = trim(strip_tags($_POST["fname"]));
         $lastName = trim(strip_tags($_POST["lname"]));
+        $email = trim(strip_tags($_POST["email"]));
+        $createDate = "Дата регистрации: ".date("H:i:s d.m.Y l");
+        $ip = get_ip();
 
-        $result = $firstName." ".$lastName."\n";
+        $result = $firstName." ".$lastName." ".$email." ".$createDate." ".$ip."\n";
 
         file_put_contents(FILENAME, $result, FILE_APPEND);
 
@@ -43,6 +63,7 @@
 
             Имя: <input type="text" name="fname" /><br />
             Фамилия: <input type="text" name="lname" /><br />
+            E-Mail: <input type="text" name="email" /><br />
 
             <br />
 
